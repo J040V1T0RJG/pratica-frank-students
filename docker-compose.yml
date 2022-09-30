@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - 6022:5432
+    env_file:
+      - .env
+    volumes:
+      - pg:/var/lib/postgresql/data
+    networks:
+      - frank_students_networks
+
+  node:
+    container_name: frank_students_image
+    build: .
+    ports:
+      - 5009:5000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - frank_students_networks
+
+volumes:
+  pg:
+
+networks:
+  frank_students_networks:
+    driver: bridge
